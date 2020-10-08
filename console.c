@@ -15,19 +15,13 @@
 #include "proc.h"
 #include "x86.h"
 
+#define GRAC_ADDR   0x3ce
 
-static void vgainit(){
-  *(int *)P2V(0xB8F94) = 0x0253;
-  *(int *)P2V(0xB8F96) = 0x024F;
-  *(int *)P2V(0xB8F98) = 0x0232;
-  *(int *)P2V(0xB8F9A) = 0x0230;
-  *(int *)P2V(0xB8F9C) = 0x0232;
-  *(int *)P2V(0xB8F9E) = 0x0230;
-/*
-   uchar *VGA = 0xA0000;
-   offset = 320*y + x;
-   VGA[offset] = color;*/
-}
+static void vgainit(void);
+static void set_graphics_mode(unsigned int mode); // Aca cambiamos a modo grafico
+//static void prueba_put_pixel(void);
+static void prueba_pintar_pantalla(void); // Aca imprimimos de negro un poco de la pantalla para que vea el error que nos hace
+
 
 static void consputc(int);
 
@@ -299,6 +293,43 @@ consolewrite(struct inode *ip, char *buf, int n)
   return n;
 }
 
+static void vgainit(){
+  *(int *)P2V(0xB8F94) = 0x0253;
+  *(int *)P2V(0xB8F96) = 0x024F;
+  *(int *)P2V(0xB8F98) = 0x0232;
+  *(int *)P2V(0xB8F9A) = 0x0230;
+  *(int *)P2V(0xB8F9C) = 0x0232;
+  *(int *)P2V(0xB8F9E) = 0x0230;
+
+
+}
+
+static void set_graphics_mode(unsigned int mode){
+  outb(GRAC_ADDR,0x06);
+  outb(GRAC_ADDR + 1,mode);
+}
+
+/*static void prueba_put_pixel(void){
+  unsigned int offset;
+  uchar *VGA = (uchar *)P2V(0xA0000);
+  offset = 0;
+  VGA[offset]= 00;
+
+}*/
+
+static void prueba_pintar_pantalla(void){
+  unsigned int offset;
+  uchar *VGA = (uchar *)P2V(0xA0000);
+  for (unsigned int i = 0 ; i< 100 ; i++){
+    for (unsigned int j = 0 ; j<100 ; j++){
+      offset = 320*i + j;
+      VGA[offset] = 0;
+    }
+    
+  }
+}
+
+
 void
 consoleinit(void)
 {
@@ -310,5 +341,8 @@ consoleinit(void)
 
   ioapicenable(IRQ_KBD, 0);
   vgainit();
+  set_graphics_mode(1);
+  //prueba_put_pixel();
+  prueba_pintar_pantalla();
 }
 
