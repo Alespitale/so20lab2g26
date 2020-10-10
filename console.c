@@ -15,6 +15,7 @@
 #include "proc.h"
 #include "x86.h"
 
+/* ----------------------------Definiciones de los registros y cosas varias ----------------------------*/
 #define	VGA_AC_INDEX		0x3C0
 #define	VGA_AC_WRITE		0x3C0
 #define	VGA_AC_READ		0x3C1
@@ -39,6 +40,16 @@
 #define	VGA_NUM_REGS		(1 + VGA_NUM_SEQ_REGS + VGA_NUM_CRTC_REGS + \
 				VGA_NUM_GC_REGS + VGA_NUM_AC_REGS)
 
+#define	inportb(P)		inb(P)
+#define	outportb(P,V)		outb(P,V)
+#define	peekb(S,O)		*(unsigned char *)(16uL * (S) + (O))
+#define	pokeb(S,O,V)		*(unsigned char *)(16uL * (S) + (O)) = (V)
+#define	pokew(S,O,V)		*(unsigned short *)(16uL * (S) + (O)) = (V)
+#define	_vmemwr(DS,DO,S,N)	memmove((char *)((DS) * 16 + (DO)), S, N)
+
+/* ----------------------------------------------------------------------------------------------*/
+
+/* ---------------Puertos del modo grafico----------------*/
 unsigned char g_320x200x256_modex[] =
 {
 /* MISC */
@@ -58,12 +69,17 @@ unsigned char g_320x200x256_modex[] =
 	0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
 	0x41, 0x00, 0x0F, 0x00, 0x00
 };
+/*---------------------------------------------------------*/
+
+/*-------------------------------Definiciones de funciones-----------------------------------*/
 
 static void vgainit(void);
-static void set_graphics_mode(unsigned int mode); // Aca cambiamos a modo grafico
-static void plot_pixel(void);
+static void set_graphics_mode(void); 
+static void plot_pixel(unsigned int i,unsigned int j,unsigned int color);
+static void plot_pixel1(void);
 static void write_regs(unsigned char *regs);
 
+/*--------------------------------------------------------------------------------------------*/
 
 static void consputc(int);
 
@@ -335,83 +351,6 @@ consolewrite(struct inode *ip, char *buf, int n)
   return n;
 }
 
-static void vgainit(){
-  *(int *)P2V(0xB8F94) = 0x0253;
-  *(int *)P2V(0xB8F96) = 0x024F;
-  *(int *)P2V(0xB8F98) = 0x0232;
-  *(int *)P2V(0xB8F9A) = 0x0230;
-  *(int *)P2V(0xB8F9C) = 0x0232;
-  *(int *)P2V(0xB8F9E) = 0x0230;
-
-  set_graphics_mode(1);
-}
-
-static void write_regs(unsigned char *regs)
-{
-	unsigned i;
-
-/* write MISCELLANEOUS reg */
-	outb(VGA_MISC_WRITE, *regs);
-	regs++;
-/* write SEQUENCER regs */
-	for(i = 0; i < VGA_NUM_SEQ_REGS; i++)
-	{
-		outb(VGA_SEQ_INDEX, i);
-		outb(VGA_SEQ_DATA, *regs);
-		regs++;
-	}
-/* unlock CRTC registers */
-	outb(VGA_CRTC_INDEX, 0x03);
-	outb(VGA_CRTC_DATA, inb(VGA_CRTC_DATA) | 0x80);
-	outb(VGA_CRTC_INDEX, 0x11);
-	outb(VGA_CRTC_DATA, inb(VGA_CRTC_DATA) & ~0x80);
-/* make sure they remain unlocked */
-	regs[0x03] |= 0x80;
-	regs[0x11] &= ~0x80;
-/* write CRTC regs */
-	for(i = 0; i < VGA_NUM_CRTC_REGS; i++)
-	{
-		outb(VGA_CRTC_INDEX, i);
-		outb(VGA_CRTC_DATA, *regs);
-		regs++;
-	}
-/* write GRAPHICS CONTROLLER regs */
-	for(i = 0; i < VGA_NUM_GC_REGS; i++)
-	{
-		outb(VGA_GC_INDEX, i);
-		outb(VGA_GC_DATA, *regs);
-		regs++;
-	}
-/* write ATTRIBUTE CONTROLLER regs */
-	for(i = 0; i < VGA_NUM_AC_REGS; i++)
-	{
-		(void)inb(VGA_INSTAT_READ);
-		outb(VGA_AC_INDEX, i);
-		outb(VGA_AC_WRITE, *regs);
-		regs++;
-	}
-/* lock 16-color palette and unblank display */
-	(void)inb(VGA_INSTAT_READ);
-	outb(VGA_AC_INDEX, 0x20);
-}
-
-static void set_graphics_mode(unsigned int mode){
-  write_regs(g_320x200x256_modex);
-}
-
-static void plot_pixel(void){
-  unsigned int offset;
-  uchar *VGA = (uchar *)P2V(0xA0000);
-  for (unsigned int i = 0 ; i< 100 ; i++){
-    for (unsigned int j = 0 ; j<100 ; j++){
-      offset = 320*i + j;
-      VGA[offset] = 0;
-    }
-    
-  }
-}
-
-
 void
 consoleinit(void)
 {
@@ -423,7 +362,101 @@ consoleinit(void)
 
   ioapicenable(IRQ_KBD, 0);
   vgainit();
-  plot_pixel();
+}
 
+/*-------------------------------Implementaciones de funciones-------------------------*/
+
+static void vgainit(){
+  *(int *)P2V(0xB8F94) = 0x0253;
+  *(int *)P2V(0xB8F96) = 0x024F;
+  *(int *)P2V(0xB8F98) = 0x0232;
+  *(int *)P2V(0xB8F9A) = 0x0230;
+  *(int *)P2V(0xB8F9C) = 0x0232;
+  *(int *)P2V(0xB8F9E) = 0x0230;
+
+  set_graphics_mode();
+  plot_pixel1();
+}
+
+static void set_graphics_mode(void){
+  write_regs(g_320x200x256_modex);
+}
+
+void write_regs(unsigned char *regs)
+{
+	unsigned i;
+
+/* write MISCELLANEOUS reg */
+	outportb(VGA_MISC_WRITE, *regs);
+	regs++;
+/* write SEQUENCER regs */
+	for(i = 0; i < VGA_NUM_SEQ_REGS; i++)
+	{
+		outportb(VGA_SEQ_INDEX, i);
+		outportb(VGA_SEQ_DATA, *regs);
+		regs++;
+	}
+/* unlock CRTC registers */
+	outportb(VGA_CRTC_INDEX, 0x03);
+	outportb(VGA_CRTC_DATA, inportb(VGA_CRTC_DATA) | 0x80);
+	outportb(VGA_CRTC_INDEX, 0x11);
+	outportb(VGA_CRTC_DATA, inportb(VGA_CRTC_DATA) & ~0x80);
+/* make sure they remain unlocked */
+	regs[0x03] |= 0x80;
+	regs[0x11] &= ~0x80;
+/* write CRTC regs */
+	for(i = 0; i < VGA_NUM_CRTC_REGS; i++)
+	{
+		outportb(VGA_CRTC_INDEX, i);
+		outportb(VGA_CRTC_DATA, *regs);
+		regs++;
+	}
+/* write GRAPHICS CONTROLLER regs */
+	for(i = 0; i < VGA_NUM_GC_REGS; i++)
+	{
+		outportb(VGA_GC_INDEX, i);
+		outportb(VGA_GC_DATA, *regs);
+		regs++;
+	}
+/* write ATTRIBUTE CONTROLLER regs */
+	for(i = 0; i < VGA_NUM_AC_REGS; i++)
+	{
+		(void)inportb(VGA_INSTAT_READ);
+		outportb(VGA_AC_INDEX, i);
+		outportb(VGA_AC_WRITE, *regs);
+		regs++;
+	}
+/* lock 16-color palette and unblank display */
+	(void)inportb(VGA_INSTAT_READ);
+	outportb(VGA_AC_INDEX, 0x20);
+}
+
+static void plot_pixel1(void){
+
+  int j=0,i=0;
+  for(j=0;j<320;++j){
+    for(i=0; i<200; ++i){
+      plot_pixel(j,i,0);
+    }
+  }
+
+  for(j=145;j<185;++j){
+    for(i=75; i<125; ++i){
+      plot_pixel(j,i,13);
+    }
+  }
+
+  for(j=150;j<180;++j){
+    for(i=80; i<120; ++i){
+      plot_pixel(j,i,7);
+    }
+  }
+}
+
+static void plot_pixel(unsigned int i,unsigned int j,unsigned color){
+  unsigned int offset;
+  uchar *VGA = (uchar *)P2V(0xA0000);
+  offset = 320*i + j;
+  VGA[offset] = color;
 }
 
