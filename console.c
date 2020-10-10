@@ -453,7 +453,7 @@ static void plot_pixel1(void){
   }
 }
 
-static void plot_pixel(unsigned int i,unsigned int j,unsigned color){
+static void plot_pixel(unsigned int j,unsigned int i,unsigned color){
   unsigned int offset;
   uchar *VGA = (uchar *)P2V(0xA0000);
   offset = 320*i + j;
