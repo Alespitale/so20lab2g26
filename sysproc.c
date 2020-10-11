@@ -47,6 +47,8 @@ static void set_plane(unsigned p);
 static void write_font(unsigned char *buf, unsigned font_height);
 static unsigned get_fb_seg(void);
 static void set_mode(int n);
+static void plot_pixel(int i, int j, int color);
+
 
 /* ----------------------------------------------------------------------------------------------*/
 
@@ -444,6 +446,29 @@ sys_modeswitch(void)
   set_mode(n);
   return 22;
 }
+
+int
+sys_plotpixel(void)
+{
+	int n,j,i,color;
+	(argint(0, &n));
+	j = n;
+	argint(1,&n);
+	i = n;
+	argint(2,&n);
+	color = n;
+	plot_pixel(j,i,color);
+	return 23;
+}
+
+/*-----------------------------------------Plotpixel---------------------------------*/
+static void plot_pixel(int i, int j,int color){
+  unsigned int offset;
+  uchar *VGA = (uchar *)P2V(0xA0000);
+  offset = 320*i + j;
+  VGA[offset] = color;
+}
+/*-----------------------------------------------------------------------------------*/
 
 /*-----------------------------Set mode----------------------------------------------*/
 static void set_mode(int mode){
