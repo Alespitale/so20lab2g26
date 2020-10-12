@@ -69,7 +69,7 @@ void vgaSetPalette(int index, int r, int g, int b) {
 }
 
 /*-----------------------------------------Plotpixel---------------------------------*/
-void plot_pixel(int i, int j,int color){
+void plot_pixel(int j, int i,int color){
   unsigned int offset;
   uchar *VGA = (uchar *)P2V(0xA0000);
   offset = 320*i + j;

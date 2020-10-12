@@ -112,7 +112,7 @@ sys_plotpixel(void)
 	i = n;
 	argint(2,&n);
 	color = n;
-	plot_pixel(j,i,color);
+	plot_pixel(i,j,color);
 	return 23;
 }
 
