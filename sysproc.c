@@ -99,7 +99,6 @@ sys_modeswitch(void)
   (argint(0, &n));
   set_mode(n);
   setdefaultVGApalette();
-  //print_image(image);
   return 22;
 }
 

@@ -25,10 +25,7 @@
 
 #define	inportb(P)		inb(P)
 #define	outportb(P,V)		outb(P,V)
-#define	peekb(S,O)		*(unsigned char *)(16uL * (S) + (O))
-#define	pokeb(S,O,V)		*(unsigned char *)(16uL * (S) + (O)) = (V)
-#define	pokew(S,O,V)		*(unsigned short *)(16uL * (S) + (O)) = (V)
-#define	_vmemwr(DS,DO,S,N)	memmove((char *)((DS) * 16 + (DO)), S, N)
+
 
 
 

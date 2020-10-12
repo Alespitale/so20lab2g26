@@ -12,18 +12,12 @@ struct superblock;
 
 // vga.c
 
-void        set_graphics_mode(void);
-void        write_regs(unsigned char *regs);
-void        set_text_mode(void);
-void        vmemwr(unsigned dst_off, unsigned char *src, unsigned count);
-void        set_plane(unsigned p);
-void        write_font(unsigned char *buf, unsigned font_height);
-unsigned    get_fb_seg(void);
-void        set_mode(int n);
-void        plot_pixel(int i, int j, int color);
-void        print_image(int * image);
-void        setdefaultVGApalette(void);
-void        vgaSetPalette(int index, int r, int g, int b);
+
+void            write_regs(unsigned char *regs);
+void            set_mode(int n);
+void            plot_pixel(int i, int j, int color);
+void            setdefaultVGApalette(void);
+void            vgaSetPalette(int index, int r, int g, int b);
 
 // bio.c
 void            binit(void);
