@@ -21,7 +21,7 @@ void        write_font(unsigned char *buf, unsigned font_height);
 unsigned    get_fb_seg(void);
 void        set_mode(int n);
 void        plot_pixel(int i, int j, int color);
-void        print_image(unsigned char * image);
+void        print_image(int * image);
 void        setdefaultVGApalette(void);
 void        vgaSetPalette(int index, int r, int g, int b);
 

@@ -328,7 +328,7 @@ void vgaSetPalette(int index, int r, int g, int b) {
   outb(0x3C9, b); 
 }
 
-void print_image(unsigned char * image){
+void print_image(int * image){
 	unsigned int i,j,p;
 	p = 0;
 	for(i = 0 ; i<320 ; i++){
