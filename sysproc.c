@@ -116,3 +116,22 @@ sys_plotpixel(void)
 	return 23;
 }
 
+int
+sys_plotrectangle(void)
+{
+  /*
+  int n,i1,i2,i3,i4,color;
+	argint(0, &n);
+	i1 = n;
+	argint(1,&n);
+	i2 = n;
+	argint(2,&n);
+	i3 = n;
+	argint(0, &n);
+	i4 = n;
+	argint(2,&n);
+	color = n;
+  */
+	//plot_rectangle(i1,i2,i3,i4,color);
+  return 24;
+}
