@@ -127,9 +127,9 @@ sys_plotrectangle(void)
 	i2 = n;
 	argint(2,&n);
 	i3 = n;
-	argint(0, &n);
+	argint(3, &n); 
 	i4 = n;
-	argint(2,&n);
+	argint(4,&n);
 	color = n;
   
 	plot_rectangle(i1,i2,i3,i4,color);
