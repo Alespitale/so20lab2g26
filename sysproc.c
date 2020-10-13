@@ -119,7 +119,7 @@ sys_plotpixel(void)
 int
 sys_plotrectangle(void)
 {
-  /*
+  
   int n,i1,i2,i3,i4,color;
 	argint(0, &n);
 	i1 = n;
@@ -131,7 +131,8 @@ sys_plotrectangle(void)
 	i4 = n;
 	argint(2,&n);
 	color = n;
-  */
-	//plot_rectangle(i1,i2,i3,i4,color);
+  
+	plot_rectangle(i1,i2,i3,i4,color);
   return 24;
 }
+
