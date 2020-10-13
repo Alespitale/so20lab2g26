@@ -5,7 +5,7 @@
 
 
 
-##Introducción
+## Introducción
 
 Al incio , nos resulto muy ajeno xv6 y no sabiamos muy bien como encarar el laboratorio.
 Si bien sabiamos sobre syscalls , y un poco de manejo de memoria que estudiamos del teórico ,nos costo empezar a entender el codigo de xv6 ,fue un largo proceso ,pero fue solo hasta que entendimos como manejarnos entre los archivos buscando lo que necesitabamos saber de xv6 dentro del mismo y muy poco en fuentes externas.
@@ -16,7 +16,7 @@ Fue un duro proceso hasta entender que vga no es complicado ,si no que lo compli
 ___
 
 
-##Desarrollo
+## Desarrollo
 
 El primer paso con el cual empezamos fue aprender sobre xv6 , utilizamos mucho el comando grep para ver como es que se implementaban las diferentes syscalls y demas curiosidades que nos podian generar, por ejemplo , que es la función P2V ,y como es que se implementaba dentro de xv6.
 Antes de comenzar la Parte I , necesitabamos saber que era "Text mode" y "Graphics mode" , y como modificarlos.
@@ -36,7 +36,7 @@ Y por ultimo la parte divertida fue dibujar algo en el modografico , quisimo hac
 ___
 
 
-##Conclusión
+## Conclusión
 
 Un laboratorio divertido de hacer ,en el cual aprendimos sobre xv6 ,como manipularlos a nuestro gusto, como utilizar el userspace y kernel space.
 Agregar syscalls nuevas , como es el que la syscall toma argumentos , como manejar el text mode y graphic mode ,como pintar y dibujar en pantalla.
