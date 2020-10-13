@@ -1,18 +1,17 @@
 
+<a name="top"></a>
+#               Informe
 
-
-
-**Índice**
+##Índice
 1.[Introducción](#id1)
 2.[Desarrolo](#id2)
 3.[Conclusión](#id3)
-4.[Bibliografía](#id4)
 
 
 ___
 
 
-<div id='id1' />
+<a name="id1"></a>
 ##Introducción
 
 Al incio , nos resulto muy ajeno xv6 y no sabiamos muy bien como encarar el laboratorio.
@@ -20,11 +19,12 @@ Si bien sabiamos sobre syscalls , y un poco de manejo de memoria que estudiamos 
 Luego sobre vga ,leimos mucho la pagina de Santiago Romero ,el cual no solo tiene cursos de vga si no una gran variedad de cursos para programadores.
 Fue un duro proceso hasta entender que vga no es complicado ,si no que lo complicado es entenderlo ,luego te das cuenta que es muy simple y manipulable.
 
+[Inicio](#top)
 ___
 
 
 
-<div id='id2' />
+<a name="id2"></a>
 ##Desarrollo
 
 El primer paso con el cual empezamos fue aprender sobre xv6 , utilizamos mucho el comando grep para ver como es que se implementaban las diferentes syscalls y demas curiosidades que nos podian generar, por ejemplo , que es la función P2V ,y como es que se implementaba dentro de xv6.
@@ -41,11 +41,12 @@ vga.h.
 Pudimos hacer casi todos los extras que pedian , modularizar , plotrectangle , activar la paleta de 256 colores ,pero nos falto recuperar las fuentes , quedo pendiente ese apartado.
 Y por ultimo la parte divertida fue dibujar algo en el modografico , quisimo hacer una funcion fuera de xv6 , para nosotros ,el cual toma una imagen y te devuelve un arreglo de enteros , para usar dicho arreglo en xv6 e imprimir algo mas bello de lo que nuestra imaginación podia hacer.Fue un total fracaso , creo que perdimos dia intentando implementar dicha funcion pero bueno , al final nos dividimos el trabajo y dibujar algo simple pero que tomo su tiempo.
 
+[Inicio](#top)
 ___
 
 
 
-<div id='id3' />
+<a name="id3"></a>
 ##Conclusión
 
 Un laboratorio divertido de hacer ,en el cual aprendimos sobre xv6 ,como manipularlos a nuestro gusto, como utilizar el userspace y kernel space.
@@ -54,7 +55,7 @@ Aprendimos a ultilizar los puertos para accerder a los registros de vga.
 Si bien el estar en pandemia y el no poder estar en el aula y preguntar las dudas a los profes ,es un bajón , lo tomamos como una oportunidad de ser autodidactas y en el momento que vemos que en ninguna pagina , foro , libro logramos captar una idea , preguntarles a ellos por zulip.
 Pero en fin , fue un muy lindo laboratorio y con un resultado divertido.
 
-
+[Inicio](#top)
 ___
 
 
