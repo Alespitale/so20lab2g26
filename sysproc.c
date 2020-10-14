@@ -98,7 +98,7 @@ sys_modeswitch(void)
   int n;
   (argint(0, &n));
   set_mode(n);
-  setdefaultVGApalette();
+  set_palette_256();
   return 22;
 }
 

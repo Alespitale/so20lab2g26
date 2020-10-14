@@ -184,8 +184,8 @@ UPROGS=\
 	_modeswitch\
 	_plotpixel\
 	_plotrectangle\
+	_3acordes\
 	_zombie\
-	_pix_3acordes\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -254,7 +254,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
-	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c modeswitch.c plotpixel.c plotrectangle.c pix_3acordes.c zombie.c\
+	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c modeswitch.c plotpixel.c plotrectangle.c 3acordes.c zombie.c\
 	printf.c umalloc.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\

@@ -51,7 +51,7 @@ static int vga256_24bit[256] = { 0x000000, 0x0000a8, 0x00a800, 0x00a8a8, 0xa8000
 
 /*------------------------------------256_colours-------------------------------------*/
 
-void setdefaultVGApalette(void) {
+void set_palette_256(void) {
   for(int index=0;index<256;index++) {
     int value = vga256_24bit[index];
     vgaSetPalette(index,
@@ -88,6 +88,8 @@ void set_mode(int mode){
 		write_regs(g_320x200x256);
 	}else if (mode == 0){
 		write_regs(g_80x25_text);
+	}else {
+		cprintf("Usage: modeswitch 0 o 1 \n");
 	}
 }
 /*-----------------------------------------------------------------------------------*/

@@ -15,7 +15,7 @@ struct superblock;
 void            write_regs(unsigned char *regs);
 void            set_mode(int n);
 void            plot_pixel(int i, int j, int color);
-void            setdefaultVGApalette(void);
+void            set_palette_256(void);
 void            vgaSetPalette(int index, int r, int g, int b);
 void            plot_rectangle(int x1, int y1, int x2, int y2, int color);
 
