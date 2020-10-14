@@ -210,5 +210,5 @@ int main (){
   	}
   	i = i +2;
   }
-  return 0;
+  exit();
 }
